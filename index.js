@@ -11,11 +11,7 @@ const commandsList = Object.keys(commands);
 
 client.on("ready",() => {
     console.log("This bot has started.");
-    client.user.setGame("!help");
-
-    client.guilds.forEach((value, key) => {
-    });
-
+    client.user.setGame("Online");
 });
 
 client.on('message', (message) => {
