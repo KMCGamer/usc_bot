@@ -5,7 +5,6 @@ The official University of South Carolina discord bot. Used mostly for:
  * Managing roles.
  * Displaying messages.
 
-
 ## Installation
 
 ### Prerequisites 
@@ -14,12 +13,11 @@ Install and update npm:
 
 `sudo apt-get install npm && sudo npm install npm@latest -g`
 
-
 Install stable version of node using n: 
 
 `sudo npm install n -g && sudo n stable`
 
-### Config
+### cock_bot and node modules
 
 Clone the github repo to your current working directory:
 
@@ -27,7 +25,13 @@ Clone the github repo to your current working directory:
 
 Change directory into cock_bot:
 
-`cd cock_bot/`
+`cd cock_bot`
+
+Install the required node modules:
+
+`sudo npm install`
+
+### Config
 
 Create a json file called `config.json` in the current directory containing this information:
 ```json
@@ -40,7 +44,6 @@ Create a json file called `config.json` in the current directory containing this
 ```
 
 Make sure you put the authentication key of the bot otherwise it will not work.
-
 
 ## Usage
 
@@ -71,4 +74,3 @@ To stop the bot, type:
 and then delete the process:
 
 `sudo pm2 delete index.js`
-
