@@ -5,21 +5,17 @@ const Discord = require("discord.js");
 const client = new Discord.Client();
 const fs = require("fs");
 
-function removeAtSymbol(str) {
-    if (str.charAt(0) === "@") {
-        return str.slice(1);
-    } else {
-        return str;
-    }
-}
-
 const commands = require("./commands/commands.js");
 
 const commandsList = Object.keys(commands);
 
 client.on("ready",() => {
     console.log("This bot has started.");
-    client.user.setGame("Online");
+    client.user.setGame("!help");
+
+    client.guilds.forEach((value, key) => {
+    });
+
 });
 
 client.on('message', (message) => {
@@ -43,13 +39,9 @@ client.on('message', (message) => {
 
     try {
         commands[command].issue(message);  
-    } catch (Error) {
+    } catch (err) {
         message.channel.send(`${message.guild.members.get(config.god)}: The bot ran into an unexpected error. Fix this shit.`);
-        fs.appendFile('/var/log/discord-error-log.txt', Error.message, function (err) {
-            if (err) {
-                console.log("Something ");
-            }
-        });
+        console.log(err);
     }
 });
 

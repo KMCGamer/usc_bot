@@ -16,10 +16,13 @@ function editRole(isAdd, message, mentionedUser, requestedRole) {
 
 function roles(message) {
     const messageString = message.content;
-    const commandArray = messageString.split(" ");
 
-    // if list is mentioned, write the list and exit immediately
-    if (commandArray[1] === "list") {
+    // filter out any empty array
+    const commandArray = messageString.split(/ +/g);
+
+    // if only !roles is said, just print the roles because people dont read.
+    // also if list is mentioned, write the list and exit immediately.
+    if ( commandArray.length === 1 || commandArray[1] === "list") {
         let roleNames = [];
         for (let [key,value] of message.guild.roles) {
             if (value.name !== "@everyone" && value.name !== config.botName) {
@@ -51,27 +54,35 @@ function roles(message) {
     }
     const mentionedUser = message.mentions.members.first();
 
-    // check if the bot is higher than the mentioned user
-    // if (message.guild.members.find("name", config.botName).highestRole) {
+    // Nobody can edit the bots roles.
+    if (mentionedUser.user.username === config.botName) {
+        message.channel.send("You may not edit this bots roles.");
+        return;
+    }
 
-    // }
-    
-    // check if the role name is valid
-    if (!message.guild.roles.find("name", commandArray.slice(3,commandArray.length).join(" "))) {
+    // point all temporary lowercase role names to their correct uppercase role names
+    const rolesDict = {};
+    message.guild.roles.forEach((value, key) => {
+        rolesDict[value.name.toLowerCase()] = value.name;
+    });
+
+    // check if the role name is valid (not undefined)
+    const tempRole = rolesDict[commandArray.slice(3).join(" ").toLowerCase()]
+    if (!tempRole) {
         message.channel.send("Error: Invalid group name");
         return;
     }
 
-    const requestedRole = message.guild.roles.find("name", commandArray.slice(3,commandArray.length).join(" "));
+    const requestedRole = message.guild.roles.find("name", tempRole);
 
     // make sure the role is not admin or president
     if (requestedRole.name === "Admin" || requestedRole.name === "President" || 
-        requestedRole.name === "Officer" ) {
-        message.channel.send("This bot is not allowed to manage Admin, President, or Officer roles.");
+        requestedRole.name === "Officer" || requestedRole.name === "Bots") {
+        message.channel.send("This bot is not allowed to manage Admin, President, Officer or Bot roles.");
         return;
     }
 
-    // Todo, figure out if the user already has the role...
+    // Figure out if the user already has the role...
     if (mentionedUser.roles.get(requestedRole.id) && isAdd){
         message.channel.send("User already has this role.");
         return;
