@@ -1,12 +1,11 @@
 "use strict";
 
 const config = require("./config.json");
-const Discord = require("discord.js");
-const client = new Discord.Client();
+const commands = require("./commands/commands.js");
+const discord = require("discord.js");
 const fs = require("fs");
 
-const commands = require("./commands/commands.js");
-
+const client = new discord.Client();
 const commandsList = Object.keys(commands);
 
 client.on("ready",() => {
@@ -15,7 +14,6 @@ client.on("ready",() => {
 });
 
 client.on('message', (message) => {
-
     // Only accept commands in the uscbot channel
     if (message.channel.name !== config.botChannel) return;
 
@@ -34,11 +32,16 @@ client.on('message', (message) => {
     }
 
     try {
-        commands[command].issue(message);  
+        // if the command is admin and you are not an admin, dont run the command
+        if (commands[command].admin && message.member.highestRole.comparePositionTo(message.guild.roles.find("name", "Admin")) < 0) {
+            message.channel.send("You do not have permission to use this command.");
+        } else {
+            commands[command].issue(message); 
+        }
     } catch (err) {
-        message.channel.send(`${message.guild.members.get(config.god)}: The bot ran into an unexpected error. Fix this shit.`);
+        message.channel.send(`The bot ran into an unexpected error. Fix this shit.`);
         console.log(err);
     }
 });
 
-client.login(config.authkey);
+client.login(config.token);
