@@ -40,6 +40,8 @@ Create a json file called `config.json` in the current directory containing this
     "prefix": "!",
     "botName": "cock_bot",
     "botChannel": "cockbot",
+    "clientId": "",
+    "botOwner": ""
 }
 ```
 
