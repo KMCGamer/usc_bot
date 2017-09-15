@@ -8,7 +8,7 @@ All these commands will assume that you using "!" as your command prefix. If you
 | ------- | ----------- |
 | [help](#help) | Display all commands for users |
 | [roles](#roles) | Assign or deassign a role to a mentioned user |
-| [motd](#motd) | Display the message of the day |
+| [motd](#motd-message-of-the-day) | Display the message of the day |
 
 ### Help
 Displays commands for users. Commands may have admin options not accessible to some users (roles command). Additionally, commands may only be accessed by the bot owner (eval command).
