@@ -4,11 +4,11 @@ All these commands will assume that you using "!" as your command prefix. If you
 
 ## General Commands
 
-| Command | Description | Syntax|
-| ------- | ----------- | ----- |
-| help | Display all commands for users | `!help [-admin]` |
-| roles | Assign or deassign a role to a mentioned user | `!roles [-list] [(-add|-remove) @person role] [(-enable|-disable) role]` |
-| motd | Display the message of the day | `!motd [-edit message]` |
+| Command | Description |
+| ------- | ----------- |
+| [help](#help) | Display all commands for users |
+| [roles](#roles) | Assign or deassign a role to a mentioned user |
+| [motd](#motd) | Display the message of the day |
 
 ### Help
 Displays commands for users. Commands may have admin options not accessible to some users (roles command). Additionally, commands may only be accessed by the bot owner (eval command).
@@ -66,10 +66,10 @@ Displays the message of the day. Only admins can edit the motd.
 
 ## Admin Commands
 
-| Command | Description | Syntax|
-| ------- | ----------- | ----- |
-| ping | Pings the bot | `!ping` |
-| eval | Evaluate javascript code | `!eval ```<code>``` ` |
+| Command | Description |
+| ------- | ----------- |
+| [ping](#ping) | Pings the bot |
+| [eval](#eval) | Evaluate javascript code |
 
 ### Ping
 Check if the bot is responsive. Cock_bot will respond back with "Pong!" if the command is successful.
