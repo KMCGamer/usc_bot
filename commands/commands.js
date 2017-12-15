@@ -36,6 +36,9 @@ const commands = {
     issue: require('./verify.js'),
     admin: false,
   },
+  listroles: {
+    issue: require("./listroles")
+  }
 };
 
 commands.help.issue = function issue(message) {

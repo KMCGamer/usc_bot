@@ -4,10 +4,12 @@
   "description": "",
   "main": "app.js",
   "dependencies": {
+    "array-to-table": "^1.0.1",
     "discord.js": "^11.2.1",
     "lodash": "^4.17.4",
     "lowdb": "^1.0.0",
-    "nodemailer": "^4.4.1"
+    "nodemailer": "^4.4.1",
+    "table": "^4.0.2"
   },
   "devDependencies": {
     "eslint": "^4.13.1",

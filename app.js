@@ -14,10 +14,12 @@ client.on('ready', () => {
   client.user.setGame('Online');
 });
 
-client.on('message', (message) => {
-  // Only accept commands in the uscbot channel
-  if (message.channel.name !== config.botChannel) return;
+client.on("guildCreate", (guild) => {
+  console.log("Added to new server!");
+  db.addServer(guild.id);
+});
 
+client.on('message', (message) => {
   // Do not listen to commands that are made by a bot
   if (message.author.bot) return;
 

@@ -21,6 +21,7 @@ class DBController {
         db.get('servers').push({
             serverid: serverid,
             users:[],
+            disabledRoles: []
         }).write();
     }
 
@@ -58,11 +59,14 @@ class DBController {
         }).write();
     }
     
-    giveCommandToUser(serverid, userid, command) {
-
+    // Disable a role from being assigned by the bot
+    disableRole(serverid, role) {
+        db.get('servers').find({
+            serverid: serverid
+        }).get('disabledRoles').push(role).write();
     }
 
-    removeRoleFromUser(serverid, userid, command) {
+    enableRole() {
 
     }
 }
