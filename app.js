@@ -2,9 +2,12 @@ const config = require('./config.json');
 const commands = require('./commands/commands.js');
 const discord = require('discord.js');
 const fs = require('fs');
+const DBController = require('./DBController.js');
 
 const client = new discord.Client();
 const commandsList = Object.keys(commands);
+
+db = new DBController();
 
 client.on('ready', () => {
   console.log('This bot has started.');

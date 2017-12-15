@@ -37,7 +37,7 @@ class DBController {
     }
 
     // Adds a user to a server
-    addUser(serverid, userid) {
+    addUserToServer(serverid, userid) {
         db.get('servers').find({
             serverid: serverid
         }).get('users').push({
