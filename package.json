@@ -2,7 +2,7 @@
   "name": "uscbot",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "dependencies": {
     "discord.js": "^11.2.1",
     "lodash": "^4.17.4",
@@ -15,7 +15,8 @@
     "eslint-plugin-import": "^2.8.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
   },
   "author": "",
   "license": "ISC",
