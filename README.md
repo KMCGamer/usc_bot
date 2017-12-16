@@ -1,4 +1,4 @@
-# cock_bot
+![uscbot](https://user-images.githubusercontent.com/6385983/34072844-97e22a10-e25c-11e7-9710-7f00c630bef1.png)
 
 The official University of South Carolina discord bot. Used mostly for:
 
@@ -17,15 +17,15 @@ Install stable version of node using n:
 
 `sudo npm install n -g && sudo n stable`
 
-### cock_bot and node modules
+### usc_bot and node modules
 
 Clone the github repo to your current working directory:
 
-`sudo git clone https://github.com/KMCGamer/cock_bot.git`
+`sudo git clone https://github.com/KMCGamer/usc_bot.git`
 
-Change directory into cock_bot:
+Change directory into usc_bot:
 
-`cd cock_bot`
+`cd usc_bot`
 
 Install the required node modules:
 
@@ -37,11 +37,7 @@ Create a json file called `config.json` in the current directory containing this
 ```json
 {
     "authkey": "",
-    "prefix": "!",
-    "botName": "cock_bot",
-    "botChannel": "cockbot",
-    "clientId": "",
-    "botOwner": ""
+    "prefix": "!"
 }
 ```
 
