@@ -39,7 +39,7 @@ client.on('message', (message) => {
     return;
   }
 
-  // +1 for the space afterwards
+  // +1 for the space after the command
   const args = message.content.slice(config.prefix.length + command.length + 1);
 
   try {
