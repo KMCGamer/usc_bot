@@ -18,8 +18,12 @@ function giverole(message, args) {
 
   // Give the member the role
   message.member.addRole(role).then(() => {
-    message.channel.send(`You have been given the role: ${role.name}`);
+    message.react('✅');
+    message.channel.send(`You have been given the role: ${role.name}`).then((msg) => {
+      msg.delete(10000); // Delete the message ten seconds
+    });
   }).catch((err) => {
+    message.react('💢');
     message.channel.send(err.message);
   });
 }

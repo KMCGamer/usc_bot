@@ -11,7 +11,11 @@ function evaluate(message) {
     return;
   }
 
-  // run the code and print out the answer to the channel.
+  /*
+    Run the code and print out the answer to the channel.
+    The eval has access to the db as well as the message itself
+    which can display information about the server.
+  */
   try {
     const answer = eval(`(function(){${code}})()`);
     message.channel.send(answer).catch((err) => { message.channel.send(`Error: ${err.message}`); });

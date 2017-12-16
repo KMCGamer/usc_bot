@@ -2,9 +2,10 @@ const config = require('./config.json');
 const commands = require('./commands/commands.js');
 const discord = require('discord.js');
 const db = require('./DBController.js');
+const _ = require('lodash');
 
 const client = new discord.Client();
-const commandsList = Object.keys(commands);
+const commandsList = commands.map(command => command.name);
 
 // Initialize the database if it is fresh.
 db.initDatabase();
@@ -24,6 +25,10 @@ client.on('guildCreate', (guild) => {
   }
 });
 
+// Handle all PMs. All PMs should be for verification only (at the moment)
+
+
+// Handle all messages inside of guilds
 client.on('message', (message) => {
   // Do not listen to commands that are made by a bot
   if (message.author.bot) return;
@@ -35,7 +40,10 @@ client.on('message', (message) => {
 
   // Dont run any commands if its invalid.
   if (!commandsList.includes(command)) {
-    message.reply('Please enter a valid command.');
+    message.react('❓');
+    message.reply('Please enter a valid command.').then((msg) => {
+      msg.delete(10000); // Delete the message ten seconds
+    });
     return;
   }
 
@@ -43,10 +51,11 @@ client.on('message', (message) => {
   const args = message.content.slice(config.prefix.length + command.length + 1);
 
   try {
-    commands[command].issue(message, args);
+    const indexOfCommand = _.findIndex(commands, { name: command });
+    commands[indexOfCommand].issue(message, args);
   } catch (err) {
-    message.channel.send('The bot ran into an unexpected error. Fix this shit.');
-    console.log(err);
+    message.react('💢');
+    message.channel.send(`The bot ran into an unexpected error. Fix this shit: ${err.message}`);
   }
 });
 

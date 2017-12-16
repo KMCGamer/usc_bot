@@ -1,5 +1,5 @@
 const _ = require('lodash');
-const { table, getBorderCharacters } = require('table');
+const { table } = require('table');
 const db = require('../DBController.js');
 
 function listroles(message) {
@@ -13,7 +13,7 @@ function listroles(message) {
   roles.sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
 
   // Put an asterisk next to every disabled role
-  roles = roles.map(elem => (db.roleIsDisabled(message.guild.id, elem) ? `${elem}*` : elem));
+  roles = roles.map(elem => (db.roleIsDisabled(message.guild.id, elem) ? `· ${elem}*` : `· ${elem}`));
 
   // Pad the roles array to make sure every row has the same number of columns
   if (roles.length % numColumns !== 0) {
@@ -29,12 +29,33 @@ function listroles(message) {
 
   // Set the border style
   const config = {
-    border: getBorderCharacters('norc'),
+    border: {
+      topBody: '─',
+      topJoin: '─',
+      topLeft: '┌',
+      topRight: '┐',
+
+      bottomBody: '─',
+      bottomJoin: '─',
+      bottomLeft: '└',
+      bottomRight: '┘',
+
+      bodyLeft: '│',
+      bodyRight: '│',
+      bodyJoin: ' ',
+
+      joinBody: ' ',
+      joinLeft: '|',
+      joinRight: '|',
+      joinJoin: ' ',
+    },
   };
 
   // Output the table
   const output = table(data, config);
-  message.channel.send(`\`\`\`\n${output}\n*: These roles are currently disabled.\n\`\`\`\n `);
+  message.channel.send(`\`\`\`\n${output}*: These roles are disabled.\`\`\`\n `).then((msg) => {
+    msg.delete(60000); // Delete the message after a minute
+  });
 }
 
 module.exports = listroles;

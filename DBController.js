@@ -23,6 +23,7 @@ class DBController {
       users: [],
       disabledRoles: [],
       managers: [],
+      disabledCommands: [],
     }).write();
   }
 
@@ -71,6 +72,14 @@ class DBController {
       .write();
   }
 
+  // Remove a role that has been disabled
+  static removeDisabledRole(serverid, role) {
+    db.get('servers').find({
+      serverid,
+    }).get('disabledRoles').pull(role)
+      .write();
+  }
+
   // Returns true if the server is already in the db
   static serverExists(serverid) {
     return !!db.get('servers').find({ serverid }).value();
@@ -92,6 +101,22 @@ class DBController {
       serverid,
     }).get('managers').push(userid)
       .write();
+  }
+
+  static disableCommand(serverid, command) {
+    db.get('servers').find({
+      serverid,
+    }).get('disabledCommands').push(command)
+      .write();
+  }
+
+  static commandIsDisabled(serverid, command) {
+    const commandIndex = db.get('servers').find({
+      serverid,
+    }).get('disabledCommands').indexOf(command)
+      .value();
+
+    return commandIndex !== -1;
   }
 
   // TODO: removeManager()
