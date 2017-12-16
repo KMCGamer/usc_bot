@@ -1,22 +1,27 @@
 const config = require('./config.json');
 const commands = require('./commands/commands.js');
 const discord = require('discord.js');
-const fs = require('fs');
-const DBController = require('./DBController.js');
+const db = require('./DBController.js');
 
 const client = new discord.Client();
 const commandsList = Object.keys(commands);
 
-db = new DBController();
+// Initialize the database if it is fresh.
+db.initDatabase();
 
+// Set the game when bot comes online
 client.on('ready', () => {
   console.log('This bot has started.');
   client.user.setGame('Online');
 });
 
-client.on("guildCreate", (guild) => {
-  console.log("Added to new server!");
-  db.addServer(guild.id);
+// When a guild adds the bot add it to the db
+client.on('guildCreate', (guild) => {
+  console.log('Added to new server!');
+  if (!db.serverExists(guild.id)) {
+    db.addServer(guild.id);
+    db.addManager(guild.id, guild.ownerID);
+  }
 });
 
 client.on('message', (message) => {
@@ -34,13 +39,11 @@ client.on('message', (message) => {
     return;
   }
 
+  // +1 for the space afterwards
+  const args = message.content.slice(config.prefix.length + command.length + 1);
+
   try {
-    // if the command is admin and you are not an admin, dont run the command
-    if (commands[command].admin && message.member.highestRole.comparePositionTo(message.guild.roles.find('name', 'Admin')) < 0) {
-      message.channel.send('You do not have permission to use this command.');
-    } else {
-      commands[command].issue(message);
-    }
+    commands[command].issue(message, args);
   } catch (err) {
     message.channel.send('The bot ran into an unexpected error. Fix this shit.');
     console.log(err);
