@@ -13,7 +13,7 @@ db.initDatabase();
 // Set the game when bot comes online
 client.on('ready', () => {
   console.log('This bot has started.');
-  client.user.setGame('Online');
+  client.user.setGame(`${config.prefix}help`);
 });
 
 // When a guild adds the bot add it to the db

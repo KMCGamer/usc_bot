@@ -10,9 +10,9 @@ function enableRole(message, args) {
     return;
   }
 
-  // Disable the role
+  // Enable the role
   db.removeDisabledRole(message.guild.id, role.name);
-  message.channel.send(`"${role.name}" has been enabled.`);
+  message.react('✅');
 }
 
 module.exports = enableRole;

@@ -13,14 +13,14 @@ function disableRole(message, args) {
     return;
   }
 
-  // Check if the role is diasbled
-  if (db.roleIsDisabled(message.guild.id, role.name)) {
-    message.react('❌');
-    message.channel.send('Sorry, this role is already disabled.').then((msg) => {
-      msg.delete(10000); // Delete the message ten seconds
-    });
-    return;
-  }
+  // // Check if the role is diasbled
+  // if (db.roleIsDisabled(message.guild.id, role.name)) {
+  //   message.react('❌');
+  //   message.channel.send('Sorry, this role is already disabled.').then((msg) => {
+  //     msg.delete(10000); // Delete the message ten seconds
+  //   });
+  //   return;
+  // }
 
   // Disable the role
   db.disableRole(message.guild.id, role.name);

@@ -36,6 +36,7 @@ class DBController {
 
   // An alias for addServer()
   static resetServer(serverid) {
+    DBController.deleteServer(serverid);
     DBController.addServer(serverid);
   }
 

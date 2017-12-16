@@ -11,6 +11,7 @@ const disablerole = require('./disablerole');
 const removerole = require('./removerole');
 const enablerole = require('./enablerole.js');
 const clearchat = require('./clearchat.js');
+const resetserver = require('./resetserver.js');
 
 const config = require('../config.json');
 
@@ -81,6 +82,12 @@ const commands = [
     syntax: `${config.prefix}clearchat #`,
     description: 'Clear channel by # of messages',
     issue: clearchat,
+  },
+  {
+    name: 'resetserver',
+    syntax: `${config.prefix}resetserver`,
+    description: 'Reset server bot configurations',
+    issue: resetserver,
   },
 ];
 
