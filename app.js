@@ -25,13 +25,16 @@ client.on('guildCreate', (guild) => {
   }
 });
 
-// Handle all PMs. All PMs should be for verification only (at the moment)
-
-
 // Handle all messages inside of guilds
 client.on('message', (message) => {
   // Do not listen to commands that are made by a bot
   if (message.author.bot) return;
+
+  // Handle all DMs
+  if (message.channel.type === 'dm') {
+    message.channel.send('thanks for dming me!');
+    return;
+  }
 
   // Do not listen if the command doesnt start with the specified prefix
   if (message.content.slice(0, config.prefix.length) !== config.prefix) return;

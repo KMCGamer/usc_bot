@@ -2,8 +2,9 @@ const nodemailer = require('nodemailer');
 const db = require('../DBController.js');
 
 function student(message, args) {
-  message.author.send('I see you want to verify, can you please tell me your USC email address?');
-  // db.setVerifyInProgress(message.guild.id, message.member.id);
+  message.author.send('I see you want to verify yourself as a student, can you please tell me your USC email address?');
+  db.addUserToServer(message.guild.id, message.member.id);
+  db.giveUserKeycode(message.guild.id, message.member.id);
 }
 
 // function verify(message) {

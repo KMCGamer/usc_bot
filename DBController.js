@@ -41,6 +41,16 @@ class DBController {
 
   // Adds a user to a server
   static addUserToServer(serverid, userid) {
+    // Check if the user already exists in the server
+    if (db.get('servers').find({
+      serverid,
+    }).get('users').find({
+      userid,
+    })
+      .value()) {
+      return;
+    }
+
     db.get('servers').find({
       serverid,
     }).get('users').push({
@@ -117,6 +127,20 @@ class DBController {
       .value();
 
     return commandIndex !== -1;
+  }
+
+  static giveUserKeycode(serverid, userid) {
+    const keycode = [0, 0, 0, 0].map(() => _.random(0, 9));
+
+    db.get('servers').find({
+      serverid,
+    }).get('users').find({
+      userid,
+    })
+      .assign({
+        keycode,
+      })
+      .write();
   }
 
   // TODO: removeManager()
