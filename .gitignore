@@ -2,4 +2,4 @@ config.json
 node_modules/
 data/
 db.json
-test/
+docs/
