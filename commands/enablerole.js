@@ -11,7 +11,7 @@ function enableRole(message, args) {
   }
 
   // Enable the role
-  db.removeDisabledRole(message.guild.id, role.name);
+  db.removeDisabledRole(message.guild, role);
   message.react('✅');
 }
 

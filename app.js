@@ -10,15 +10,14 @@ const commandsList = commands.map(command => command.name);
 // Initialize the database if it is fresh.
 db.initDatabase();
 
-// Set the game when bot comes online
 client.on('ready', () => {
   // Add the guild to the database if its not already in.
   // This is when the database resets, but the bot still remains
   // in the guild.
-  const guilds = client.guilds.map(guild => guild.id);
-  guilds.forEach((guildid) => {
-    if (!db.serverExists(guildid)) {
-      db.addServer(guildid);
+  const guilds = client.guilds.array();
+  guilds.forEach((guild) => {
+    if (!db.guildExists(guild)) {
+      db.addGuild(guild);
     }
   });
 
@@ -26,12 +25,11 @@ client.on('ready', () => {
   client.user.setGame(`${config.prefix}help`);
 });
 
-// When a guild adds the bot add it to the db
+// When a guild adds the bot, add it to the db
 client.on('guildCreate', (guild) => {
   console.log('Added to new server!');
-  if (!db.serverExists(guild.id)) {
-    db.addServer(guild.id);
-    db.addManager(guild.id, guild.ownerID);
+  if (!db.guildExists(guild)) {
+    db.addGuild(guild);
   }
 });
 
@@ -61,7 +59,8 @@ client.on('message', (message) => {
   }
 
   // +1 for the space after the command
-  const args = message.content.slice(config.prefix.length + command.length + 1);
+  let args = message.content.slice(config.prefix.length + command.length + 1);
+  args = _.trim(args);
 
   try {
     const indexOfCommand = _.findIndex(commands, { name: command });

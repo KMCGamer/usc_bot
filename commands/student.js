@@ -3,8 +3,8 @@ const db = require('../DBController.js');
 
 function student(message, args) {
   message.author.send('I see you want to verify yourself as a student, can you please tell me your USC email address?');
-  db.addUserToServer(message.guild.id, message.member.id);
-  db.giveUserKeycode(message.guild.id, message.member.id);
+  db.addUserToGuild(message.guild, message.member);
+  db.giveUserKeycode(message.guild, message.member);
 }
 
 // function verify(message) {

@@ -6,12 +6,12 @@ const motd = require('./motd.js');
 const evaluate = require('./eval.js');
 const student = require('./student.js');
 const listroles = require('./listroles');
-const giverole = require('./giverole');
+const gainrole = require('./gainrole');
 const disablerole = require('./disablerole');
-const removerole = require('./removerole');
+const loserole = require('./loserole');
 const enablerole = require('./enablerole.js');
 const clearchat = require('./clearchat.js');
-const resetserver = require('./resetserver.js');
+const resetguild = require('./resetguild.js');
 
 const config = require('../config.json');
 
@@ -54,10 +54,10 @@ const commands = [
     issue: listroles,
   },
   {
-    name: 'giverole',
-    syntax: `${config.prefix}giverole role`,
+    name: 'gainrole',
+    syntax: `${config.prefix}gainrole role`,
     description: 'Give yourself a role',
-    issue: giverole,
+    issue: gainrole,
   },
   {
     name: 'disablerole',
@@ -66,10 +66,10 @@ const commands = [
     issue: disablerole,
   },
   {
-    name: 'removerole',
-    syntax: `${config.prefix}removerole role`,
+    name: 'loserole',
+    syntax: `${config.prefix}loserole role`,
     description: 'Take a role away from yourself',
-    issue: removerole,
+    issue: loserole,
   },
   {
     name: 'enablerole',
@@ -84,10 +84,10 @@ const commands = [
     issue: clearchat,
   },
   {
-    name: 'resetserver',
-    syntax: `${config.prefix}resetserver`,
-    description: 'Reset server bot configurations',
-    issue: resetserver,
+    name: 'resetguild',
+    syntax: `${config.prefix}resetguild`,
+    description: 'Reset guild bot configurations',
+    issue: resetguild,
   },
 ];
 
@@ -96,7 +96,7 @@ commands[_.findIndex(commands, { name: 'help' })].issue = (message) => {
   const data = [['Command', 'Description', 'Syntax']];
 
   commands.forEach((command) => {
-    if (db.commandIsDisabled(message.guild.id, command.name)) {
+    if (db.commandIsDisabled(message.guild, command.name)) {
       command.name += '*';
     }
     data.push([command.name, command.description, command.syntax]);

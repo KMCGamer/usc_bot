@@ -1,4 +1,4 @@
-function removeRole(message, args) {
+function loseRole(message, args) {
   // Find the role in the guild
   const role = message.guild.roles.find(elem => elem.name.toLowerCase() === args.toLowerCase());
 
@@ -16,4 +16,4 @@ function removeRole(message, args) {
   });
 }
 
-module.exports = removeRole;
+module.exports = loseRole;

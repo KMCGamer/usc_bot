@@ -4,16 +4,17 @@ const db = require('../DBController.js');
 
 function listroles(message) {
   // Pull all the names of roles except @everyone
-  let roles = _.pull(message.guild.roles.map(role => role.name), '@everyone');
+  let roles = _.remove(message.guild.roles.array(), role => role.name !== '@everyone');
 
   // Number of columns the table should have
   const numColumns = 4;
 
   // Sort array alphabetically
-  roles.sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
+  roles.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
+  // let rolenames = roles.map(role => role.name);
 
   // Put an asterisk next to every disabled role
-  roles = roles.map(elem => (db.roleIsDisabled(message.guild.id, elem) ? `· ${elem}*` : `· ${elem}`));
+  roles = roles.map(role => (db.roleIsDisabled(message.guild, role) ? `· ${role.name}*` : `· ${role.name}`));
 
   // Pad the roles array to make sure every row has the same number of columns
   if (roles.length % numColumns !== 0) {

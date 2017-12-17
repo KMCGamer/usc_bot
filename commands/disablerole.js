@@ -23,7 +23,7 @@ function disableRole(message, args) {
   // }
 
   // Disable the role
-  db.disableRole(message.guild.id, role.name);
+  db.disableRole(message.guild, role);
   message.react('✅');
 }
 

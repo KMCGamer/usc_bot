@@ -1,6 +1,6 @@
 const db = require('../DBController.js');
 
-function giverole(message, args) {
+function gainRole(message, args) {
   // Find the role in the guild
   const role = message.guild.roles.find(elem => elem.name.toLowerCase() === args.toLowerCase());
 
@@ -11,7 +11,7 @@ function giverole(message, args) {
   }
 
   // Check if the role is diasbled
-  if (db.roleIsDisabled(message.guild.id, role.name)) {
+  if (db.roleIsDisabled(message.guild, role)) {
     message.channel.send('Sorry, this role is currently disabled.');
     return;
   }
@@ -28,4 +28,4 @@ function giverole(message, args) {
   });
 }
 
-module.exports = giverole;
+module.exports = gainRole;

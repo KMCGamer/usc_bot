@@ -10,52 +10,57 @@ class DBController {
   static initDatabase() {
     if (_.isEmpty(db.value())) {
       db.defaults({
-        servers: [],
+        guilds: [],
         config: {},
       }).write();
     }
   }
 
-  // Adds a server
-  static addServer(serverid) {
-    db.get('servers').push({
-      serverid,
+  // Adds a guild
+  static addGuild(guild) {
+    db.get('guilds').push({
+      guildID: guild.id,
       users: [],
       disabledRoles: [],
       managers: [],
       disabledCommands: [],
     }).write();
+
+    // TODO: import default values
+
+    DBController.addManager(guild.owner);
   }
 
-  // Remove a server
-  static deleteServer(serverid) {
-    db.get('servers').remove({
-      serverid,
+  // Remove a guild
+  static deleteGuild(guild) {
+    db.get('guilds').remove({
+      guildID: guild.id,
     }).write();
   }
 
-  // An alias for addServer()
-  static resetServer(serverid) {
-    DBController.deleteServer(serverid);
-    DBController.addServer(serverid);
+  // An alias for addGuild()
+  static resetGuild(guild) {
+    DBController.deleteGuild(guild);
+    DBController.addGuild(guild);
   }
 
-  // Adds a user to a server
-  static addUserToServer(serverid, userid) {
-    // Check if the user already exists in the server
-    if (db.get('servers').find({
-      serverid,
+  // Adds a user to a guild
+  static addUserToGuild(guild, user) {
+    // Check if the user already exists in the guild
+    if (db.get('guilds').find({
+      guildID: guild.id,
     }).get('users').find({
-      userid,
+      userID: user.id,
     })
       .value()) {
       return;
     }
 
-    db.get('servers').find({
-      serverid,
+    // Add the user to the guild
+    db.get('guilds').find({
+      guildID: guild.id,
     }).get('users').push({
-      userid,
+      userID: user.id,
       student: false,
       extraCommands: [],
     })
@@ -63,80 +68,82 @@ class DBController {
   }
 
   // Authenticates the user as a student
-  static makeUserStudent(serverid, userid) {
-    db.get('servers').find({
-      serverid,
+  static makeUserStudent(guild, user) {
+    db.get('guilds').find({
+      guildID: guild.id,
     }).get('users').find({
-      userid,
+      userID: user.id,
     })
       .assign({
         student: true,
       })
       .write();
+
+    // removeUserKeycode()
   }
 
   // Disable a role from being assigned by the bot
-  static disableRole(serverid, role) {
-    db.get('servers').find({
-      serverid,
-    }).get('disabledRoles').push(role)
+  static disableRole(guild, role) {
+    db.get('guilds').find({
+      guildID: guild.id,
+    }).get('disabledRoles').push(role.id)
       .write();
   }
 
   // Remove a role that has been disabled
-  static removeDisabledRole(serverid, role) {
-    db.get('servers').find({
-      serverid,
-    }).get('disabledRoles').pull(role)
+  static removeDisabledRole(guild, role) {
+    db.get('guilds').find({
+      guildID: guild.id,
+    }).get('disabledRoles').pull(role.id)
       .write();
   }
 
-  // Returns true if the server is already in the db
-  static serverExists(serverid) {
-    return !!db.get('servers').find({ serverid }).value();
-  }
-
-  // Returns true if the role is disabled for the server
-  static roleIsDisabled(serverid, role) {
-    const roleIndex = db.get('servers').find({
-      serverid,
-    }).get('disabledRoles').indexOf(role)
+  // Returns true if the role is disabled for the guild
+  static roleIsDisabled(guild, role) {
+    const roleIndex = db.get('guilds').find({
+      guildID: guild.id,
+    }).get('disabledRoles').indexOf(role.id)
       .value();
 
     return roleIndex !== -1;
   }
 
-  // Adds a bot manager to the server (like an admin)
-  static addManager(serverid, userid) {
-    db.get('servers').find({
-      serverid,
-    }).get('managers').push(userid)
+  // Returns true if the guild is already in the db
+  static guildExists(guild) {
+    return !!db.get('guilds').find({ guildID: guild.id }).value();
+  }
+
+  // Adds a bot manager to the guild (like an admin)
+  static addManager(guild, user) {
+    db.get('guilds').find({
+      guildID: guild.id,
+    }).get('managers').push(user.id)
       .write();
   }
 
-  static disableCommand(serverid, command) {
-    db.get('servers').find({
-      serverid,
+  static disableCommand(guild, command) {
+    db.get('guilds').find({
+      guildID: guild.id,
     }).get('disabledCommands').push(command)
       .write();
   }
 
-  static commandIsDisabled(serverid, command) {
-    const commandIndex = db.get('servers').find({
-      serverid,
+  static commandIsDisabled(guild, command) {
+    const commandIndex = db.get('guilds').find({
+      guildID: guild.id,
     }).get('disabledCommands').indexOf(command)
       .value();
 
     return commandIndex !== -1;
   }
 
-  static giveUserKeycode(serverid, userid) {
-    const keycode = [0, 0, 0, 0].map(() => _.random(0, 9));
+  static giveUserKeycode(guild, user) {
+    const keycode = [0, 0, 0, 0].map(() => _.random(0, 9)).join('');
 
-    db.get('servers').find({
-      serverid,
+    db.get('guilds').find({
+      guildID: guild.id,
     }).get('users').find({
-      userid,
+      userID: user.id,
     })
       .assign({
         keycode,
@@ -144,6 +151,7 @@ class DBController {
       .write();
   }
 
+  // TODO: removeUserKeycode()
   // TODO: removeManager()
 }
 
