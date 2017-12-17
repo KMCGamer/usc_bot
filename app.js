@@ -12,6 +12,16 @@ db.initDatabase();
 
 // Set the game when bot comes online
 client.on('ready', () => {
+  // Add the guild to the database if its not already in.
+  // This is when the database resets, but the bot still remains
+  // in the guild.
+  const guilds = client.guilds.map(guild => guild.id);
+  guilds.forEach((guildid) => {
+    if (!db.serverExists(guildid)) {
+      db.addServer(guildid);
+    }
+  });
+
   console.log('This bot has started.');
   client.user.setGame(`${config.prefix}help`);
 });
