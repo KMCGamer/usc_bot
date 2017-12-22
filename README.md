@@ -1,4 +1,4 @@
-![uscbot](https://user-images.githubusercontent.com/6385983/34072844-97e22a10-e25c-11e7-9710-7f00c630bef1.png)
+![uscbot-2](https://user-images.githubusercontent.com/6385983/34280715-d90ed39c-e687-11e7-82bc-9693a94b19ec.png)
 
 The official University of South Carolina discord bot. Used mostly for:
 
