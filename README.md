@@ -7,17 +7,25 @@ The official University of South Carolina discord bot. Used mostly for:
 
 ## Installation
 
-### Prerequisites 
+### Prerequisites
 
-Install and update npm: 
+Make sure node and npm are installed and updated. Easiest way is downloading through [nvm](https://github.com/creationix/nvm).
 
-`sudo apt-get install npm && sudo npm install npm@latest -g`
+Install nvm script:
 
-Install stable version of node using n: 
+`wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash`
 
-`sudo npm install n -g && sudo n stable`
+_Close and reopen terminal._
 
-### usc_bot and node modules
+Install node through nvm:
+
+`nvm install node`
+
+Set default node version to latest:
+
+`nvm use node`
+
+### usc_bot and nodemodules
 
 Clone the github repo to your current working directory:
 
@@ -36,7 +44,7 @@ Install the required node modules:
 Create a json file called `config.json` in the current directory containing this information:
 ```json
 {
-    "authkey": "",
+    "token": "",
     "prefix": "!"
 }
 ```
@@ -51,7 +59,7 @@ You can either launch the bot within your terminal and keep it open or you can u
 
 To run the bot, simply type:
 
-`node index.js`
+`npm start`
 
 Note that you will have to leave your terminal open otherwise the bot will shut off. You will not have access to the current terminal window either.
 
