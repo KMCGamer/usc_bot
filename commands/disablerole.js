@@ -1,6 +1,14 @@
-const db = require('../DBController.js');
+const db = require('../modules/dbcontroller.js');
+const config = require('../config/config');
 
-function disableRole(message, args) {
+// Metadata
+module.exports = {
+  name: 'disablerole',
+  description: 'Disable a role',
+  syntax: `${config.prefix}disablerole role`,
+};
+
+module.exports.run = (client, message, args) => {
   // Find the role in the guild
   const role = message.guild.roles.find(elem => elem.name.toLowerCase() === args.toLowerCase());
 
@@ -13,18 +21,16 @@ function disableRole(message, args) {
     return;
   }
 
-  // // Check if the role is diasbled
-  // if (db.roleIsDisabled(message.guild.id, role.name)) {
-  //   message.react('❌');
-  //   message.channel.send('Sorry, this role is already disabled.').then((msg) => {
-  //     msg.delete(10000); // Delete the message ten seconds
-  //   });
-  //   return;
-  // }
+  // Check if the role is diasbled
+  if (db.roleIsDisabled(message.guild.id, role.name)) {
+    message.react('❌');
+    message.channel.send('Sorry, this role is already disabled.').then((msg) => {
+      msg.delete(10000); // Delete the message ten seconds
+    });
+    return;
+  }
 
   // Disable the role
   db.disableRole(message.guild, role);
   message.react('✅');
-}
-
-module.exports = disableRole;
+};

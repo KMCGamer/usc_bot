@@ -1,5 +1,0 @@
-✅ - successfully terminated
-❓ - malformed input
-🚫 - restricted (perm issue)
-❌ - restricted (other issue)
-💢 - runtime error

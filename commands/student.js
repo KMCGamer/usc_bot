@@ -1,11 +1,23 @@
 const nodemailer = require('nodemailer');
-const db = require('../DBController.js');
+const db = require('../modules/dbcontroller.js');
+const config = require('../config/config');
 
-function student(message, args) {
-  message.author.send('I see you want to verify yourself as a student, can you please tell me your USC email address?');
-  db.addUserToGuild(message.guild, message.member);
-  db.giveUserKeycode(message.guild, message.member);
-}
+// Metadata
+module.exports = {
+  name: 'student',
+  syntax: `${config.prefix}student`,
+  description: 'Verify yourself as a student',
+};
+
+module.exports.run = (message, args) => {
+  message.channel.send('Functionality coming soon');
+};
+
+// function student(message, args) {
+//   message.author.send('I see you want to verify yourself as a student, can you please tell me your USC email address?');
+//   db.addUserToGuild(message.guild, message.member);
+//   db.giveUserKeycode(message.guild, message.member);
+// }
 
 // function verify(message) {
 //   const database = require('../data/students.json');
@@ -116,5 +128,3 @@ function student(message, args) {
 //     }
 //   });
 // }
-
-module.exports = student;

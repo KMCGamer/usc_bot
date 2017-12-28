@@ -1,6 +1,14 @@
-const db = require('../DBController.js');
+const db = require('../modules/dbcontroller.js');
+const config = require('../config/config');
 
-function gainRole(message, args) {
+// Metadata
+module.exports = {
+  name: 'gainrole',
+  syntax: `${config.prefix}gainrole role`,
+  description: 'Give yourself a role',
+};
+
+module.exports.run = (client, message, args) => {
   // Find the role in the guild
   const role = message.guild.roles.find(elem => elem.name.toLowerCase() === args.toLowerCase());
 
@@ -26,6 +34,4 @@ function gainRole(message, args) {
     message.react('💢');
     message.channel.send(err.message);
   });
-}
-
-module.exports = gainRole;
+};

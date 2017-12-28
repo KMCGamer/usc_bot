@@ -1,6 +1,14 @@
-const db = require('../DBController.js'); // eslint-disable-line
+const db = require('../modules/dbcontroller.js');
+const config = require('../config/config');
 
-function evaluate(message) {
+// Metadata
+module.exports = {
+  name: 'eval',
+  syntax: `${config.prefix}eval '''code'''`,
+  description: 'Evaluate javascript code',
+};
+
+module.exports.run = (client, message, args) => {
   let code = '';
 
   // if it doesnt start and end with three back ticks, dont run it.
@@ -22,6 +30,4 @@ function evaluate(message) {
   } catch (error) {
     message.channel.send(`Error: ${error.message}`);
   }
-}
-
-module.exports = evaluate;
+};

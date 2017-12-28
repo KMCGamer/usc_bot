@@ -1,4 +1,13 @@
-function loseRole(message, args) {
+const config = require('../config/config');
+
+// Metadata
+module.exports = {
+  name: 'loserole',
+  syntax: `${config.prefix}loserole role`,
+  description: 'Take a role away from yourself',
+};
+
+module.exports.run = (client, message, args) => {
   // Find the role in the guild
   const role = message.guild.roles.find(elem => elem.name.toLowerCase() === args.toLowerCase());
 
@@ -14,6 +23,4 @@ function loseRole(message, args) {
   }).catch((err) => {
     message.channel.send(err.message);
   });
-}
-
-module.exports = loseRole;
+};

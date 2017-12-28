@@ -1,8 +1,16 @@
 const _ = require('lodash');
 const { table } = require('table');
-const db = require('../DBController.js');
+const db = require('../modules/dbcontroller.js');
+const config = require('../config/config');
 
-function listroles(message) {
+// Metadata
+module.exports = {
+  name: 'listroles',
+  syntax: `${config.prefix}listroles`,
+  description: 'List all roles',
+};
+
+module.exports.run = (client, message, args) => {
   // Pull all the names of roles except @everyone
   let roles = _.remove(message.guild.roles.array(), role => role.name !== '@everyone');
 
@@ -29,7 +37,7 @@ function listroles(message) {
   const data = _.chunk(roles, numColumns);
 
   // Set the border style
-  const config = {
+  const style = {
     border: {
       topBody: '─',
       topJoin: '─',
@@ -53,10 +61,8 @@ function listroles(message) {
   };
 
   // Output the table
-  const output = table(data, config);
+  const output = table(data, style);
   message.channel.send(`\`\`\`\n${output}*: These roles are disabled.\`\`\`\n `).then((msg) => {
     msg.delete(60000); // Delete the message after a minute
   });
-}
-
-module.exports = listroles;
+};

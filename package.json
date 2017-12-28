@@ -6,6 +6,7 @@
   "dependencies": {
     "array-to-table": "^1.0.1",
     "discord.js": "^11.2.1",
+    "fs-extra": "^5.0.0",
     "lodash": "^4.17.4",
     "lowdb": "^1.0.0",
     "nodemailer": "^4.4.1",

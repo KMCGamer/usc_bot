@@ -1,6 +1,14 @@
-const db = require('../DBController.js');
+const db = require('../modules/dbcontroller.js');
+const config = require('../config/config');
 
-function enableRole(message, args) {
+// Metadata
+module.exports = {
+  name: 'enablerole',
+  syntax: `${config.prefix}enablerole role`,
+  description: 'Enable a role',
+};
+
+module.exports.run = (client, message, args) => {
   // Find the role in the guild
   const role = message.guild.roles.find(elem => elem.name.toLowerCase() === args.toLowerCase());
 
@@ -13,6 +21,4 @@ function enableRole(message, args) {
   // Enable the role
   db.removeDisabledRole(message.guild, role);
   message.react('✅');
-}
-
-module.exports = enableRole;
+};
