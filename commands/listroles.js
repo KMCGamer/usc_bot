@@ -16,15 +16,22 @@ module.exports.run = (client, message, args) => {
   // Sort array alphabetically
   roles.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
 
-  // Put an asterisk next to every disabled role
-  roles = roles.filter(role => !db.roleIsDisabled(message.guild, role)).map(role => role.name);
+  
+  switch (args) {
+    case '-a': // display all roles
+      roles = roles.map(role => role.name);
+      break;
+    default: // display only enabled roles
+      roles = roles.filter(role => !db.roleIsDisabled(message.guild, role)).map(role => role.name);
+      break;
+  }
 
   // List roles inside of an embed, makes it look pretty.
   const embed = {
     embed: {
       color: 12388653,
       author: {
-        name: 'List of All Roles',
+        name: 'List of roles',
         icon_url: client.user.avatarURL,
       },
       fields: [{
