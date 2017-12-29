@@ -55,14 +55,11 @@ client.on('guildCreate', async (guild) => {
 
 // Handle all messages inside of guilds
 client.on('message', (message) => {
-  // Do not listen to commands that are made by a bot
-  if (message.author.bot) return;
-
   // Handle all DMs
-  if (message.channel.type === 'dm') {
-    message.channel.send('thanks for dming me!');
-    return;
-  }
+  if (message.channel.type === 'dm') return;
+
+  // Do not listen to messages that are made by a bot
+  if (message.author.bot) return;
 
   // Do not listen if the command doesnt start with the specified prefix
   if (message.content.slice(0, config.prefix.length) !== config.prefix) return;
@@ -71,6 +68,15 @@ client.on('message', (message) => {
 
   // Dont run the command if it isnt valid.
   if (!client.commands.some(elem => elem.name === command)) return;
+
+  // Check perms
+  if (db.commandIsDisabled(message.guild, command) && !db.userIsManager(message.guild, message.author)) {
+    message.react(reactions.restricted);
+    message.channel.send('You do not have permission for this command.').then((msg) => {
+      msg.delete(5000);
+    });
+    return;
+  }
 
   // +1 for the space after the command
   let args = message.content.slice(config.prefix.length + command.length + 1);

@@ -38,12 +38,6 @@ class DBController {
     }).write();
   }
 
-  // An alias for addGuild()
-  static resetGuild(guild) {
-    DBController.deleteGuild(guild);
-    DBController.addGuild(guild);
-  }
-
   // Adds a user to a guild
   static addUserToGuild(guild, user) {
     // Check if the user already exists in the guild
@@ -82,6 +76,19 @@ class DBController {
     // removeUserKeycode()
   }
 
+  // Returns true if the user is a student
+  static userIsStudent(guild, user) {
+    const isStudent = db.get('guilds').find({
+      guildID: guild.id,
+    }).get('users').find({
+      userID: user.id,
+    })
+      .get('student')
+      .value();
+
+    return !!isStudent;
+  }
+
   // Disable a role from being assigned by the bot
   static disableRole(guild, role) {
     db.get('guilds').find({
@@ -100,12 +107,10 @@ class DBController {
 
   // Returns true if the role is disabled for the guild
   static roleIsDisabled(guild, role) {
-    const roleIndex = db.get('guilds').find({
+    return db.get('guilds').find({
       guildID: guild.id,
-    }).get('disabledRoles').indexOf(role.id)
+    }).get('disabledRoles').includes(role.id)
       .value();
-
-    return roleIndex !== -1;
   }
 
   // Returns true if the guild is already in the db
@@ -121,6 +126,14 @@ class DBController {
       .write();
   }
 
+  // Returns true if the user is a manager of the guild
+  static userIsManager(guild, user) {
+    return db.get('guilds').find({
+      guildID: guild.id,
+    }).get('managers').includes(user.id)
+      .value();
+  }
+
   // Disables a command from being given
   static disableCommand(guild, command) {
     db.get('guilds').find({
@@ -131,12 +144,10 @@ class DBController {
 
   // Checks if a command is already disabled
   static commandIsDisabled(guild, command) {
-    const commandIndex = db.get('guilds').find({
+    return db.get('guilds').find({
       guildID: guild.id,
-    }).get('disabledCommands').indexOf(command)
+    }).get('disabledCommands').includes(command)
       .value();
-
-    return commandIndex !== -1;
   }
 
   // Gives a keycode to a user for verification
@@ -152,6 +163,8 @@ class DBController {
         keycode,
       })
       .write();
+
+    return keycode;
   }
 
   // TODO: removeUserKeycode()
