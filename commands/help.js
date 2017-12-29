@@ -7,13 +7,27 @@ const reactions = require('../modules/reactions');
 module.exports = {
   name: 'help',
   syntax: `${config.prefix}help`,
+  help: '',
   description: 'Displays all commands',
 };
 
 module.exports.run = (client, message, args) => {
   const numPages = 2; // Number of pages for commands
-  const commandsPerPage = Math.ceil(client.commands.length / numPages);
-  let pages = _.chunk(client.commands, commandsPerPage);
+
+  let pages;
+  switch (args) {
+    case '-a': {
+      const commandsPerPage = Math.ceil(client.commands.length / numPages);
+      pages = _.chunk(client.commands, commandsPerPage);
+      break;
+    }
+    default: {
+      const enabledCommands = client.commands.filter(cmd => !db.commandIsDisabled(message.guild, cmd.name));
+      const commandsPerPage = Math.ceil(enabledCommands.length / numPages);
+      pages = _.chunk(enabledCommands, commandsPerPage);
+      break;
+    }
+  }
 
   // Parse the commands into embed message data
   pages = pages.map((page) => {
@@ -68,5 +82,4 @@ module.exports.run = (client, message, args) => {
       await messageReaction.remove(notbot);
     });
   }).catch(err => console.log(err));
-  // message.channel.send('__Full commands list__: <https://goo.gl/eFN6wF>').then(msg => msg.delete(60000));
 };

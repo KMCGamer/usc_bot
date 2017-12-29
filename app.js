@@ -80,7 +80,7 @@ client.on('message', (message) => {
     const indexOfCommand = _.findIndex(client.commands, { name: command });
     client.commands[indexOfCommand].run(client, message, args);
   } catch (err) {
-    message.react('💢');
+    message.react(reactions.debug);
     message.channel.send(`The bot ran into an unexpected error. Fix this shit: ${err.message}`);
   }
 });
