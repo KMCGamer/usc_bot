@@ -17,11 +17,24 @@ module.exports.run = (client, message, args) => {
   roles.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
 
   // Put an asterisk next to every disabled role
-  roles = roles.map(role => (db.roleIsDisabled(message.guild, role) ? `${role.name}*` : `${role.name}`));
+  roles = roles.filter(role => !db.roleIsDisabled(message.guild, role)).map(role => role.name);
 
-  roles = roles.join('\n');
+  // List roles inside of an embed, makes it look pretty.
+  const embed = {
+    embed: {
+      color: 12388653,
+      author: {
+        name: 'List of All Roles',
+        icon_url: client.user.avatarURL,
+      },
+      fields: [{
+        name: '__Roles:__',
+        value: roles.join('\n'),
+      }],
+    },
+  };
 
-  message.channel.send(`\`\`\`\n${roles}*: These roles are disabled.\`\`\`\n `).then((msg) => {
+  message.channel.send(embed).then((msg) => {
     msg.delete(60000); // Delete the message after a minute
   });
 };

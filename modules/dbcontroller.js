@@ -12,7 +12,6 @@ class DBController {
       db.defaults({
         guilds: [],
         config: {},
-        help: [],
       }).write();
     }
   }
