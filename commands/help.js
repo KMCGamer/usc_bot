@@ -1,9 +1,9 @@
-const { table, getBorderCharacters } = require('table');
-const fs = require('fs-extra');
+const _ = require('lodash');
 const db = require('../modules/dbcontroller.js');
 const config = require('../config/config');
 const reactions = require('../modules/reactions');
 
+// Metadata
 module.exports = {
   name: 'help',
   syntax: `${config.prefix}help`,
@@ -11,34 +11,62 @@ module.exports = {
 };
 
 module.exports.run = (client, message, args) => {
-  const data = [['Command', 'Description', 'Syntax']];
+  const numPages = 2; // Number of pages for commands
+  const commandsPerPage = Math.ceil(client.commands.length / numPages);
+  let pages = _.chunk(client.commands, commandsPerPage);
 
-  client.commands.forEach((command) => {
-    if (db.commandIsDisabled(message.guild, command.name)) {
-      command.name += '*';
-    }
-    data.push([command.name, command.description, command.syntax]);
+  // Parse the commands into embed message data
+  pages = pages.map((page) => {
+    const fields = page.map(command => ({
+      name: `__${command.name}__`,
+      value: `Description: ${command.description}.\nSyntax: \`${command.syntax}\``,
+    }));
+
+    return {
+      embed: {
+        color: 12388653,
+        author: {
+          name: 'Click Here For Full List',
+          url: 'https://goo.gl/eFN6wF',
+          icon_url: 'https://user-images.githubusercontent.com/6385983/34427109-5772d042-ec0c-11e7-896d-7e9096b92856.png',
+        },
+        fields,
+      },
+    };
   });
 
-  data.pop();
-  data.pop();
+  // Send the first help page with buttons that display other pages when clicked
+  message.channel.send(pages[0]).then(async (msg) => {
+    await msg.react(reactions.one);
+    await msg.react(reactions.two);
+    await msg.react(reactions.x);
 
-  const tableConfig = {
-    border: getBorderCharacters('norc'),
-  };
+    const collector = msg.createReactionCollector((reaction, user) => user !== client.user);
 
-  const output = table(data, tableConfig);
+    // TODO: make this so that it depends on the numPages
+    collector.on('collect', async (messageReaction) => {
+      switch (messageReaction.emoji.name) {
+        case reactions.x: // remove the message
+          messageReaction.message.delete();
+          return;
+        case reactions.one: // display first page
+          messageReaction.message.edit(pages[0]);
+          break;
+        case reactions.two: // display second page
+          messageReaction.message.edit(pages[1]);
+          break;
+        default:
+          break;
+      }
 
-  // Delete these message after a minute
-  message.channel.send(`\`\`\`\n${output}*: These commands are disabled.\`\`\`\n`)
-    .then(async (msg) => {
-      await msg.react(reactions.one);
-      await msg.react(reactions.two);
-      await msg.react(reactions.three);
-      await msg.react(reactions.four);
-      await msg.react('🇽');
-      msg.delete(60000);
-    })
-    .catch(err => console.log(err));
-  message.channel.send('__Full commands list__: <https://goo.gl/eFN6wF>').then(msg => msg.delete(60000));
+      /*
+      Get the user that clicked the reaction and remove the reaction.
+      This matters because if you just do remove(), it will remove the bots
+      reaction which will have unintended side effects.
+      */
+      const notbot = messageReaction.users.filter(clientuser => clientuser !== client.user).first();
+      await messageReaction.remove(notbot);
+    });
+  }).catch(err => console.log(err));
+  // message.channel.send('__Full commands list__: <https://goo.gl/eFN6wF>').then(msg => msg.delete(60000));
 };

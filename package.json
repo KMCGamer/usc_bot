@@ -4,13 +4,11 @@
   "description": "",
   "main": "app.js",
   "dependencies": {
-    "array-to-table": "^1.0.1",
     "discord.js": "^11.2.1",
     "fs-extra": "^5.0.0",
     "lodash": "^4.17.4",
     "lowdb": "^1.0.0",
-    "nodemailer": "^4.4.1",
-    "table": "^4.0.2"
+    "nodemailer": "^4.4.1"
   },
   "devDependencies": {
     "eslint": "^4.13.1",
@@ -25,6 +23,6 @@
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "git://github.com/KMCGamer/cock_bot.git"
+    "url": "git://github.com/KMCGamer/usc_bot.git"
   }
 }
