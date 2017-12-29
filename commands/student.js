@@ -1,6 +1,8 @@
 const nodemailer = require('nodemailer');
 const db = require('../modules/dbcontroller.js');
 const config = require('../config/config');
+const dot = require('dot');
+const fs = require('fs-extra');
 
 // Metadata
 module.exports = {
@@ -9,7 +11,7 @@ module.exports = {
   description: 'Verify yourself as a student',
 };
 
-module.exports.run = (client, message, args) => {
+module.exports.run = async (client, message, args) => {
   const studentRole = message.guild.roles.find('name', 'Student');
 
   // Check if user is already student in the database
@@ -42,11 +44,16 @@ module.exports.run = (client, message, args) => {
       },
     });
 
+    const rawHTML = await fs.readFile(`${__dirname}/../email/email.html`, 'utf8');
+    const tempFn = dot.template(rawHTML);
+    const result = tempFn({ keycode });
+
     const mailOptions = {
       from: config.email.username,
       to: recipient,
       subject: 'UoSC eSports Student Verification',
-      html: `<html><p>Hello!</p>Enter in this four digit key to authenticate yourself as a student in the discord server!<p><p><b>Verification Number:</b> ${keycode}</p><p>To verify yourself in the discord, type !verify followed by your 4 digit verification number.</p><p>See you on the rift, track, or battlefield!</p><p>cock_bot</p><p><i>If you believe this email was sent to you on accident, ignore this message.</i></p></html>`,
+      html: result,
+      text: `Thank you for verifying yourself as a student!\nVerification Code: ${keycode}\nTo verify yourself as a student, please respond back to the bot in a private message with the verification code above. This step will only be available for a short time. If you fail to verify your account, you will need to restart this process.\nIf you are not the intended recipient of this email, please contact soesports@gmail.com.`,
     };
 
     transporter.sendMail(mailOptions, (error) => {
@@ -69,31 +76,3 @@ module.exports.run = (client, message, args) => {
     });
   });
 };
-
-// module.exports.verify = (client, message, args) => {
-//   // check if the guildmember if already in the database and verified
-//   if (database[message.author.id] && database[message.author.id].verified) {
-//     message.member.addRole(studentRole).then(() => {
-//       message.channel.send('You have been given the student role.');
-//     });
-//     return;
-//   }
-
-//   const commandArray = message.content.split(/ +/g);
-
-//   // TODO: check if the person has done this within the last hour
-
-//   // check if the email is already verified in the database.
-//   const guildMembers = Object.keys(database);
-//   if (guildMembers.some((member) => {
-//     if (database[member].email === commandArray[1] &&
-//             database[member].verified === true) {
-//       return true;
-//     }
-//     return false;
-//   })) {
-//     message.channel.send('This email is already taken and verified. Please contact an admin.');
-//     return;
-//   }
-
-// }

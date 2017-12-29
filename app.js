@@ -8,11 +8,11 @@ const reactions = require('./modules/reactions');
 const client = new discord.Client();
 
 // Read all the commands and put them into the client
-fs.readdir('./commands/').then((files) => {
+fs.readdir(`${__dirname}/commands/`).then((files) => {
   const commands = [];
   files.forEach((file) => {
     if (file.endsWith('.js')) {
-      const command = require(`./commands/${file}`);
+      const command = require(`${__dirname}/commands/${file}`);
       commands.push(command);
     }
   });
