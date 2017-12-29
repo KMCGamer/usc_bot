@@ -57,6 +57,7 @@ class DBController {
       userID: user.id,
       student: false,
       extraCommands: [],
+      email: '',
     })
       .write();
   }
@@ -71,9 +72,8 @@ class DBController {
       .assign({
         student: true,
       })
+      .unset('keycode')
       .write();
-
-    // removeUserKeycode()
   }
 
   // Returns true if the user is a student
@@ -150,6 +150,24 @@ class DBController {
       .value();
   }
 
+  // Gives user an email address
+  static giveUserEmail(guild, user, email) {
+    db.get('guilds').find({
+      guildID: guild.id,
+    }).get('users').find({
+      userID: user.id,
+    })
+      .assign({
+        email,
+      })
+      .write();
+  }
+
+  // Checks if email is available for use
+  static isEmailTaken(email) {
+    return db.get('guilds').some(g => g.users.some(user => user.email === email && user.student)).value();
+  }
+
   // Gives a keycode to a user for verification
   static giveUserKeycode(guild, user) {
     const keycode = [0, 0, 0, 0].map(() => _.random(0, 9)).join('');
@@ -166,9 +184,6 @@ class DBController {
 
     return keycode;
   }
-
-  // TODO: removeUserKeycode()
-  // TODO: removeManager()
 }
 
 

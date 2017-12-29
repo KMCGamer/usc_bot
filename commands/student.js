@@ -25,12 +25,13 @@ module.exports.run = async (client, message, args) => {
   const keycode = db.giveUserKeycode(message.guild, message.member);
 
   message.author.send('I see you want to verify yourself as a student, can you please tell me your USC email address?').then(async (dm) => {
-    const filter = m => /^\w+@(email|mailbox).sc.edu$/.test(m); // proper usc email syntax
+    const filter = m => /^\w+@(email|mailbox).sc.edu$/.test(m.content) && !db.isEmailTaken(m.content);
 
     let recipient;
     try {
       recipient = await dm.channel.awaitMessages(filter, { max: 1, time: 60000, errors: ['time'] });
       recipient = recipient.first().content;
+      db.giveUserEmail(message.guild, message.author, recipient);
     } catch (err) {
       console.log(err);
       return;
