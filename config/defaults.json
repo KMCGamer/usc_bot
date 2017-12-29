@@ -1,0 +1,10 @@
+{
+    "disabledCommands": [
+        "clearchat",
+        "disablecommand",
+        "disablerole",
+        "enablerole",
+        "eval",
+        "resetguild"
+    ]
+}

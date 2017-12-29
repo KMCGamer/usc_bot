@@ -5,13 +5,14 @@ const FileSync = require('lowdb/adapters/FileSync');
 const adapter = new FileSync('db.json');
 const db = low(adapter);
 
+const defaults = require('../config/defaults');
+
 class DBController {
   // Initialize the database
   static initDatabase() {
     if (_.isEmpty(db.value())) {
       db.defaults({
         guilds: [],
-        config: {},
       }).write();
     }
   }
@@ -23,7 +24,8 @@ class DBController {
       users: [],
       disabledRoles: [],
       managers: [],
-      disabledCommands: [],
+      disabledCommands: defaults.disabledCommands,
+      motd: '',
     }).write();
 
     // TODO: import default values
