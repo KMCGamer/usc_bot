@@ -17,4 +17,5 @@ module.exports = {
   two: '2⃣',
   three: '3⃣',
   four: '4⃣',
+  x: '🇽',
 };

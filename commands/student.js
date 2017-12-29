@@ -9,7 +9,7 @@ module.exports = {
   description: 'Verify yourself as a student',
 };
 
-module.exports.run = (message, args) => {
+module.exports.run = (client, message, args) => {
   message.channel.send('Functionality coming soon');
 };
 

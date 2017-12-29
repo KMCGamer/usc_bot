@@ -12,6 +12,7 @@ class DBController {
       db.defaults({
         guilds: [],
         config: {},
+        help: [],
       }).write();
     }
   }
@@ -27,8 +28,6 @@ class DBController {
     }).write();
 
     // TODO: import default values
-
-    DBController.addManager(guild.owner);
   }
 
   // Remove a guild
@@ -121,6 +120,7 @@ class DBController {
       .write();
   }
 
+  // Disables a command from being given
   static disableCommand(guild, command) {
     db.get('guilds').find({
       guildID: guild.id,
@@ -128,6 +128,7 @@ class DBController {
       .write();
   }
 
+  // Checks if a command is already disabled
   static commandIsDisabled(guild, command) {
     const commandIndex = db.get('guilds').find({
       guildID: guild.id,
@@ -137,6 +138,7 @@ class DBController {
     return commandIndex !== -1;
   }
 
+  // Gives a keycode to a user for verification
   static giveUserKeycode(guild, user) {
     const keycode = [0, 0, 0, 0].map(() => _.random(0, 9)).join('');
 
