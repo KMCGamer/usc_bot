@@ -13,25 +13,23 @@ module.exports = {
 
 module.exports.run = (client, message, args) => {
   const buttons = [
-    reactions.one, reactions.two,
-    reactions.three, reactions.four,
-    reactions.five, reactions.six,
-    reactions.seven, reactions.eight,
-    reactions.nine, reactions.ten,
+    reactions.zero, reactions.one,
+    reactions.two, reactions.three,
+    reactions.four, reactions.five,
+    reactions.six, reactions.seven,
+    reactions.eight, reactions.nine,
   ];
 
-  const numPages = 2; // Number of pages for commands
+  const commandsPerPage = 8;
 
   let pages;
   switch (args) {
     case '-a': {
-      const commandsPerPage = Math.ceil(client.commands.length / numPages);
       pages = _.chunk(client.commands, commandsPerPage);
       break;
     }
     default: {
       const enabledCommands = client.commands.filter(cmd => !db.commandIsDisabled(message.guild, cmd.name));
-      const commandsPerPage = Math.ceil(enabledCommands.length / numPages);
       pages = _.chunk(enabledCommands, commandsPerPage);
       break;
     }
@@ -59,28 +57,38 @@ module.exports.run = (client, message, args) => {
 
   // Send the first help page with buttons that display other pages when clicked
   message.channel.send(pages[0]).then(async (msg) => {
-    await msg.react(reactions.one);
-    await msg.react(reactions.two);
-    await msg.react(reactions.x);
-    msg.delete(60000);
+    /*
+    TODO: fix this so that ESLint doesnt freak out.
+    For some reason await really only works with for..of
+    */
+    // react number buttons
+    for (const [index, value] of pages.entries()) {
+      await msg.react(buttons[index]);
+    }
 
+    // react delete button
+    await msg.react(reactions.x);
+    msg.delete(60000).catch();
+
+    // Collect reactions for the help message
     const collector = msg.createReactionCollector((reaction, user) => user !== client.user);
 
-    // TODO: make this so that it depends on the numPages
     collector.on('collect', async (messageReaction) => {
-      switch (messageReaction.emoji.name) {
-        case reactions.x: // remove the message
-          messageReaction.message.delete();
-          return;
-        case reactions.one: // display first page
-          messageReaction.message.edit(pages[0]);
-          break;
-        case reactions.two: // display second page
-          messageReaction.message.edit(pages[1]);
-          break;
-        default:
-          break;
+      // If the x button is pressed, remove the message.
+      if (messageReaction.emoji.name === reactions.x) {
+        msg.delete(); // Delete the message
+        collector.stop(); // Get rid of the collector.
+        return;
       }
+      
+      // Get the index of the page by button pressed
+      const pageIndex = buttons.indexOf(messageReaction.emoji.name);
+
+      // Return if emoji is irrelevant or the page doesnt exist (number too high)
+      if (pageIndex === -1 || !pages[pageIndex]) return;
+
+      // Edit the message to show the new page.
+      msg.edit(pages[pageIndex]);
 
       /*
       Get the user that clicked the reaction and remove the reaction.
