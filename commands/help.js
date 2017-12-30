@@ -21,18 +21,24 @@ module.exports.run = (client, message, args) => {
   ];
 
   const commandsPerPage = 8;
-
   let pages;
-  switch (args) {
-    case '-a': {
-      pages = _.chunk(client.commands, commandsPerPage);
-      break;
-    }
-    default: {
-      const enabledCommands = client.commands.filter(cmd => !db.commandIsDisabled(message.guild, cmd.name));
-      pages = _.chunk(enabledCommands, commandsPerPage);
-      break;
-    }
+
+  // Switch for different arguments
+  if (args === '-a') { // Show all commands
+    pages = _.chunk(client.commands, commandsPerPage);
+  } else if (client.commands.some(elem => elem.name === args)) { // Show help for a specific command
+    const command = _.find(client.commands, { name: args });
+    message.channel.send({
+      embed: {
+        color: 12388653,
+        title: `__${command.name}__`,
+        description: 'This is the extra help.',
+      },
+    });
+    return;
+  } else { // Show only enabled commands
+    const enabledCommands = client.commands.filter(cmd => !db.commandIsDisabled(message.guild, cmd.name));
+    pages = _.chunk(enabledCommands, commandsPerPage);
   }
 
   // Parse the commands into embed message data
@@ -80,7 +86,7 @@ module.exports.run = (client, message, args) => {
         collector.stop(); // Get rid of the collector.
         return;
       }
-      
+
       // Get the index of the page by button pressed
       const pageIndex = buttons.indexOf(messageReaction.emoji.name);
 
