@@ -9,28 +9,33 @@ module.exports = {
 };
 
 module.exports.run = (client, message, args) => {
-  // Find the role in the guild
-  const role = message.guild.roles.find(elem => elem.name.toLowerCase() === args.toLowerCase());
+  // Support for multiple roles
+  const roles = args.split(',').map(arg => _.trim(arg)).filter(Boolean);
 
-  // Return if the role doesnt exist.
-  if (!role) {
-    message.react('❓');
-    message.channel.send('Please enter a valid role name.').then((msg) => {
-      msg.delete(10000); // Delete the message ten seconds
-    });
-    return;
-  }
+  roles.forEach((roleName) => {
+    // Find the role in the guild
+    const role = message.guild.roles.find(elem => elem.name.toLowerCase() === roleName.toLowerCase());
 
-  // Check if the role is diasbled
-  if (db.roleIsDisabled(message.guild, role)) {
-    message.react('❌');
-    message.channel.send('Sorry, this role is already disabled.').then((msg) => {
-      msg.delete(10000); // Delete the message ten seconds
-    });
-    return;
-  }
+    // Return if the role doesnt exist.
+    if (!role) {
+      message.react('❓');
+      message.channel.send(`"${roleName}" is not a valid role name.`).then((msg) => {
+        msg.delete(5000);
+      });
+      return;
+    }
 
-  // Disable the role
-  db.disableRole(message.guild, role);
-  message.react('✅');
+    // Check if the role is diasbled
+    if (db.roleIsDisabled(message.guild, role)) {
+      message.react('❌');
+      message.channel.send(`"${roleName}" is already disabled.`).then((msg) => {
+        msg.delete(5000);
+      });
+      return;
+    }
+
+    // Disable the role
+    db.disableRole(message.guild, role);
+    message.react('✅');
+  });
 };

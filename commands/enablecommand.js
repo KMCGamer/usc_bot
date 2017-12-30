@@ -1,12 +1,12 @@
 const db = require('../modules/dbcontroller.js');
-const _ = require('lodash');
 const config = require('../config/config');
+const _ = require('lodash');
 
 // Metadata
 module.exports = {
-  name: 'disablecommand',
-  description: 'Disable a command',
-  syntax: `${config.prefix}disablecommand command`,
+  name: 'enablecommand',
+  syntax: `${config.prefix}enablecommand command`,
+  description: 'Enable a command',
 };
 
 module.exports.run = (client, message, args) => {
@@ -18,22 +18,22 @@ module.exports.run = (client, message, args) => {
     if (!client.commands.some(elem => elem.name === commandName)) {
       message.react('❓');
       message.channel.send(`"${commandName}" is not a valid command.`).then((msg) => {
-        msg.delete(5000); // Delete the message ten seconds
+        msg.delete(5000); // Delete the message five seconds
       });
       return;
     }
 
     // Check if the command is diasbled
-    if (db.commandIsDisabled(message.guild, commandName)) {
+    if (!db.commandIsDisabled(message.guild, commandName)) {
       message.react('❌');
       message.channel.send(`"${commandName}" is already disabled.`).then((msg) => {
-        msg.delete(5000); // Delete the message ten seconds
+        msg.delete(5000); // Delete message after five seconds
       });
       return;
     }
 
-    // Disable the command
-    db.disableCommand(message.guild, commandName);
+    // Enable the role
+    db.removeDisabledCommand(message.guild, commandName);
     message.react('✅');
   });
 };
