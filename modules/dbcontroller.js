@@ -142,6 +142,14 @@ class DBController {
       .write();
   }
 
+  // Remove a disabled command
+  static removeDisabledCommand(guild, command) {
+    db.get('guilds').find({
+      guildID: guild.id,
+    }).get('disabledCommands').pull(command)
+      .write();
+  }
+
   // Checks if a command is already disabled
   static commandIsDisabled(guild, command) {
     return db.get('guilds').find({
