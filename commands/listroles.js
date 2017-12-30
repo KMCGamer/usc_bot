@@ -16,12 +16,15 @@ module.exports.run = (client, message, args) => {
   // Sort array alphabetically
   roles.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
 
-  
+  let title;
+
   switch (args) {
     case '-a': // display all roles
+      title = 'List of All Roles';
       roles = roles.map(role => role.name);
       break;
     default: // display only enabled roles
+      title = 'List of Enabled Roles';
       roles = roles.filter(role => !db.roleIsDisabled(message.guild, role)).map(role => role.name);
       break;
   }
@@ -31,7 +34,7 @@ module.exports.run = (client, message, args) => {
     embed: {
       color: 12388653,
       author: {
-        name: 'List of roles',
+        name: title,
         icon_url: client.user.avatarURL,
       },
       fields: [{
