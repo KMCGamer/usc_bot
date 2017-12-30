@@ -12,6 +12,14 @@ module.exports = {
 };
 
 module.exports.run = (client, message, args) => {
+  const buttons = [
+    reactions.one, reactions.two,
+    reactions.three, reactions.four,
+    reactions.five, reactions.six,
+    reactions.seven, reactions.eight,
+    reactions.nine, reactions.ten,
+  ];
+
   const numPages = 2; // Number of pages for commands
 
   let pages;
@@ -54,6 +62,7 @@ module.exports.run = (client, message, args) => {
     await msg.react(reactions.one);
     await msg.react(reactions.two);
     await msg.react(reactions.x);
+    msg.delete(60000);
 
     const collector = msg.createReactionCollector((reaction, user) => user !== client.user);
 
