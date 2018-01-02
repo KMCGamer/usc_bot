@@ -64,7 +64,7 @@ client.on('message', (message) => {
   // Do not listen if the command doesnt start with the specified prefix
   if (message.content.slice(0, config.prefix.length) !== config.prefix) return;
 
-  const command = message.content.split(' ')[0].slice(config.prefix.length);
+  const command = message.content.split(' ')[0].slice(config.prefix.length).toLowerCase();
 
   // Dont run the command if it isnt valid.
   if (!client.commands.some(elem => elem.name === command)) return;
