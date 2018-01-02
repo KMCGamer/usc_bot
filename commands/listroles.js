@@ -5,8 +5,13 @@ const config = require('../config/config');
 // Metadata
 module.exports = {
   name: 'listroles',
-  syntax: `${config.prefix}listroles`,
+  syntax: `${config.prefix}listroles [-a]`,
   description: 'List all roles',
+  help: 'Lists the roles (not including "\\@everyone")',
+  usage: [
+    `\`${config.prefix}listroles\` - lists only the enabled roles`,
+    `\`${config.prefix}listroles -a\` - lists all roles`,
+  ],
 };
 
 module.exports.run = (client, message, args) => {

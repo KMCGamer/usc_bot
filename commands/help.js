@@ -6,9 +6,14 @@ const reactions = require('../modules/reactions');
 // Metadata
 module.exports = {
   name: 'help',
-  syntax: `${config.prefix}help`,
-  help: '',
-  description: 'Displays all commands',
+  syntax: `${config.prefix}help [-a] [command]`,
+  description: 'Display help for commands',
+  help: 'Displays help for commands and can be used to display more information about a specific command',
+  usage: [
+    `\`${config.prefix}help\` - Displays help for enabled commands only`,
+    `\`${config.prefix}help -a\` - Displays help for all commands`,
+    `\`${config.prefix}help command\` - Displays information about a specfic command`,
+  ],
 };
 
 module.exports.run = (client, message, args) => {
@@ -32,7 +37,11 @@ module.exports.run = (client, message, args) => {
       embed: {
         color: 12388653,
         title: `__${command.name}__`,
-        description: 'This is the extra help.',
+        description: `${command.help}.`,
+        fields: [{
+          name: 'Usage',
+          value: command.usage.join('.\n'),
+        }],
       },
     });
     return;
@@ -68,7 +77,7 @@ module.exports.run = (client, message, args) => {
     For some reason await really only works with for..of
     */
     // react number buttons
-    for (const [index, value] of pages.entries()) {
+    for (const [index, _] of pages.entries()) {
       await msg.react(buttons[index]);
     }
 
