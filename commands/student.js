@@ -9,6 +9,10 @@ module.exports = {
   name: 'student',
   syntax: `${config.prefix}student`,
   description: 'Verify yourself as a student',
+  help: 'In order to get the student role, you must verify you have a USC email address. Using the `student` command will initiaite a direct message session with the bot asking for your email address. Upon a correct email input, the bot will send a four digit keycode to your email. Respond back with the correct keycode and you will be given the student role in the guild.',
+  usage: [
+    `\`${config.prefix}student\` - Start the verification process for receiving a student role.`,
+  ],
 };
 
 module.exports.run = async (client, message, args) => {
@@ -24,7 +28,7 @@ module.exports.run = async (client, message, args) => {
   db.addUserToGuild(message.guild, message.member);
   const keycode = db.giveUserKeycode(message.guild, message.member);
 
-  message.author.send('I see you want to verify yourself as a student, can you please tell me your USC email address?').then(async (dm) => {
+  message.author.send('I see you want to verify yourself as a student, can you please tell me your USC email address? I will accept either @email.sc.edu or @mailbox.sc.edu.').then(async (dm) => {
     const filter = m => /^\w+@(email|mailbox).sc.edu$/.test(m.content) && !db.isEmailTaken(m.content);
 
     let recipient;
@@ -59,9 +63,9 @@ module.exports.run = async (client, message, args) => {
 
     transporter.sendMail(mailOptions, (error) => {
       if (error) {
-        dm.channel.send('Error sending email. Make sure you entered in your email address correctly.');
+        dm.channel.send('Error sending email. Please contact an admin.');
       } else {
-        dm.channel.send('Email sent. Check your school email for your verification code!').then(async (dm2) => {
+        dm.channel.send('Email sent. Check your school email for your verification code! Check your spam folder if you can\'t find the email.').then(async (dm2) => {
           const keycodeFilter = m => m.toString() === keycode;
           try {
             recipient = await dm2.channel.awaitMessages(keycodeFilter, { max: 1, time: 60000, errors: ['time'] });

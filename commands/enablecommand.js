@@ -7,6 +7,10 @@ module.exports = {
   name: 'enablecommand',
   syntax: `${config.prefix}enablecommand command`,
   description: 'Enable a command',
+  help: 'Primarily used to undo the `disablecommand` command. This opens up the command to be able to be used by the general user. Do not enable commands that only an Admin/Manager should have access to.',
+  usage: [
+    `\`${config.prefix}enablecommand command\` - Removes restrictions on a specific command.`,
+  ],
 };
 
 module.exports.run = (client, message, args) => {

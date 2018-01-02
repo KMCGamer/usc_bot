@@ -8,11 +8,11 @@ module.exports = {
   name: 'help',
   syntax: `${config.prefix}help [-a] [command]`,
   description: 'Display help for commands',
-  help: 'Displays help for commands and can be used to display more information about a specific command',
+  help: 'Displays help for commands and can be used to display more information about a specific command.',
   usage: [
-    `\`${config.prefix}help\` - Displays help for enabled commands only`,
-    `\`${config.prefix}help -a\` - Displays help for all commands`,
-    `\`${config.prefix}help command\` - Displays information about a specfic command`,
+    `\`${config.prefix}help\` - Displays help for enabled commands only.`,
+    `\`${config.prefix}help -a\` - Displays help for all commands.`,
+    `\`${config.prefix}help command\` - Displays information about a specfic command.`,
   ],
 };
 
@@ -31,16 +31,16 @@ module.exports.run = (client, message, args) => {
   // Switch for different arguments
   if (args === '-a') { // Show all commands
     pages = _.chunk(client.commands, commandsPerPage);
-  } else if (client.commands.some(elem => elem.name === args)) { // Show help for a specific command
-    const command = _.find(client.commands, { name: args });
+  } else if (client.commands.some(cmd => cmd.name === args.toLowerCase())) { // Show help for a specific command
+    const command = _.find(client.commands, { name: args.toLowerCase() });
     message.channel.send({
       embed: {
         color: 12388653,
         title: `__${command.name}__`,
-        description: `${command.help}.`,
+        description: command.help,
         fields: [{
           name: 'Usage',
-          value: command.usage.join('.\n'),
+          value: command.usage.join('\n'),
         }],
       },
     });
