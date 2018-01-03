@@ -5,7 +5,7 @@ const _ = require('lodash');
 // Metadata
 module.exports = {
   name: 'disablerole',
-  description: 'Disable a role',
+  description: 'Disable a role.',
   syntax: `${config.prefix}disablerole role`,
   help: 'When a role is disabled, it is added to the database and disallows the bot from giving that role to anyone, including managers.',
   usage: [

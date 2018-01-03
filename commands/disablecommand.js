@@ -5,7 +5,7 @@ const config = require('../config/config');
 // Metadata
 module.exports = {
   name: 'disablecommand',
-  description: 'Disable a command',
+  description: 'Disable a command.',
   syntax: `${config.prefix}disablecommand command`,
   help: 'When a command is disabled, it is added to the database and disallows anyone who is not a bot manager access to it.',
   usage: [

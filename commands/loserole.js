@@ -4,7 +4,7 @@ const config = require('../config/config');
 module.exports = {
   name: 'loserole',
   syntax: `${config.prefix}loserole role`,
-  description: 'Take a role away from yourself',
+  description: 'Take a role away from yourself.',
   help: 'Removes a role from yourself. If you remove a role from yourself and that role is disabled, you will not be able to get it back unless it is given to you or you have significant priveleges.',
   usage: [
     `\`${config.prefix}loserole role\` - Take a role away from yourself.`,

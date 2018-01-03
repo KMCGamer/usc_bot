@@ -6,7 +6,7 @@ const _ = require('lodash');
 module.exports = {
   name: 'enablerole',
   syntax: `${config.prefix}enablerole role`,
-  description: 'Enable a role',
+  description: 'Enable a role.',
   help: 'Primarily used to undo the `disablerole` command. This opens up the role to be able given to the general user. Only enable roles that have little permissions.',
   usage: [
     `\`${config.prefix}enablerole role\` - Removes restrictions on a specific role.`,

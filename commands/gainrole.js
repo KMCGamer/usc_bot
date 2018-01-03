@@ -5,7 +5,7 @@ const config = require('../config/config');
 module.exports = {
   name: 'gainrole',
   syntax: `${config.prefix}gainrole role`,
-  description: 'Give yourself a role',
+  description: 'Give yourself a role.',
   help: 'Gives yourself a role. Attempting to give yourself a disabled role will result in an error.',
   usage: [
     `\`${config.prefix}gainrole role\` - Give yourself a role.`,

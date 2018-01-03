@@ -4,7 +4,7 @@ const config = require('../config/config');
 module.exports = {
   name: 'ping',
   syntax: `${config.prefix}ping`,
-  description: 'Pings the bot',
+  description: 'Pings the bot.',
   help: 'Pings the bot to see if it is online and responsive. When the bot responds back "pong!", the bot is working as intended.',
   usage: [
     `\`${config.prefix}ping\` - The bot responds back "pong!"`,

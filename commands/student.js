@@ -8,7 +8,7 @@ const fs = require('fs-extra');
 module.exports = {
   name: 'student',
   syntax: `${config.prefix}student`,
-  description: 'Verify yourself as a student',
+  description: 'Verify yourself as a student.',
   help: 'In order to get the student role, you must verify you have a USC email address. Using the `student` command will initiaite a direct message session with the bot asking for your email address. Upon a correct email input, the bot will send a four digit keycode to your email. Respond back with the correct keycode and you will be given the student role in the guild.',
   usage: [
     `\`${config.prefix}student\` - Start the verification process for receiving a student role.`,

@@ -7,7 +7,7 @@ const reactions = require('../modules/reactions');
 module.exports = {
   name: 'help',
   syntax: `${config.prefix}help [-a] [command]`,
-  description: 'Display help for commands',
+  description: 'Display help for commands.',
   help: 'Displays help for commands and can be used to display more information about a specific command.',
   usage: [
     `\`${config.prefix}help\` - Displays help for enabled commands only.`,
@@ -54,7 +54,7 @@ module.exports.run = (client, message, args) => {
   pages = pages.map((page) => {
     const fields = page.map(command => ({
       name: `__${command.name}__`,
-      value: `Description: ${command.description}.\nSyntax: \`${command.syntax}\``,
+      value: `Description: ${command.description}\nSyntax: \`${command.syntax}\``,
     }));
 
     return {

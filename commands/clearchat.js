@@ -3,7 +3,7 @@ const config = require('../config/config');
 // Metadata
 module.exports = {
   name: 'clearchat',
-  description: 'Clear channel by # of messages',
+  description: 'Clear channel by # of messages.',
   syntax: `${config.prefix}clearchat [#]`,
   help: 'Clears the current chat channel by the number of messages specified. Only values 1-99 will be accepted. The default value is 10 messages.',
   usage: [

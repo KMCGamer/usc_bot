@@ -4,7 +4,7 @@ const config = require('../config/config');
 module.exports = {
   name: 'motd',
   syntax: `${config.prefix}motd [-e message]`,
-  description: 'Message of the day',
+  description: 'Message of the day.',
   help: 'Display the message of the day. COMING SOON: ability to edit the message of the day.',
   usage: [
     `\`${config.prefix}motd\` - Show the message of the day.`,

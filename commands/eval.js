@@ -4,7 +4,7 @@ const config = require('../config/config');
 module.exports = {
   name: 'eval',
   syntax: `${config.prefix}eval '''code'''`,
-  description: 'Evaluate javascript code',
+  description: 'Evaluate javascript code.',
   help: 'Allows a custom function to be run. This command can be very dangerous and should only be run by people who know what they\'re doing. Everything written inside of triple backticks will be run in an IIFE. Whatever is returned by the IIFE will be printed back by the bot in a message. You have access to `client` and `message`.',
   usage: [
     `\`${config.prefix}eval '''code'''\` - The bot replys whatever is returned by the code surrounded in backticks.`,
