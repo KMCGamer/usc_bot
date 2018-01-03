@@ -21,6 +21,19 @@ module.exports.run = async (client, message, args) => {
   // Check if user is already student in the database
   if (db.userIsStudent(message.guild, message.author)) {
     // Try and give the user the student role.
+    if (!message.member.roles.get(studentRole.id)) { // Check if the user doesnt have the student role
+      message.member.addRole(studentRole).then(() => {
+        message.react('✅');
+        message.channel.send('You seem to already be verified in our database. You have been given the student role.').then((msg) => {
+          msg.delete(10000); // Delete the message ten seconds
+        });
+      }).catch((err) => {
+        message.react('💢');
+        message.channel.send(err.message);
+      });
+      return;
+    }
+
     message.channel.send('You already have the student role!');
     return;
   }
@@ -29,7 +42,16 @@ module.exports.run = async (client, message, args) => {
   const keycode = db.giveUserKeycode(message.guild, message.member);
 
   message.author.send('I see you want to verify yourself as a student, can you please tell me your USC email address? I will accept either @email.sc.edu or @mailbox.sc.edu.').then(async (dm) => {
-    const filter = m => /^\w+@(email|mailbox).sc.edu$/.test(m.content) && !db.isEmailTaken(m.content);
+    const filter = (m) => { // Give the user some feedback.
+      if (m.author.bot) { // Dont listen to bot messages
+        return false;
+      }
+      if (/^\w+@(email|mailbox).sc.edu$/.test(m.content) && !db.isEmailTaken(m.content)) { // Correct email
+        return true;
+      }
+      m.channel.send('Invalid email. Please try again.'); // Incorrect email
+      return false;
+    };
 
     let recipient;
     try {
@@ -66,9 +88,18 @@ module.exports.run = async (client, message, args) => {
         dm.channel.send('Error sending email. Please contact an admin.');
       } else {
         dm.channel.send('Email sent. Check your school email for your verification code! Check your spam folder if you can\'t find the email.').then(async (dm2) => {
-          const keycodeFilter = m => m.toString() === keycode;
+          const keycodeFilter = (m) => { // Give the user some feedback
+            if (m.author.bot) { // Dont listen to bot messages
+              return false;
+            }
+            if (m.toString() === keycode) { // Correct keycode
+              return true;
+            }
+            m.channel.send('Invalid keycode. Please try again.'); // Incorrect keycode
+            return false;
+          };
           try {
-            recipient = await dm2.channel.awaitMessages(keycodeFilter, { max: 1, time: 60000, errors: ['time'] });
+            recipient = await dm2.channel.awaitMessages(keycodeFilter, { max: 1, time: 600000, errors: ['time'] }); // about 10 minutes
             db.makeUserStudent(message.guild, message.author);
             message.member.addRole(studentRole).then(() => {
               dm2.channel.send('You have been given the student role!');
