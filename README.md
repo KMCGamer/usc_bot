@@ -1,13 +1,15 @@
 ![uscbot-2](https://user-images.githubusercontent.com/6385983/34280715-d90ed39c-e687-11e7-82bc-9693a94b19ec.png)
 
-The official University of South Carolina discord bot. Used mostly for:
+The official **University of South Carolina** discord bot. Used mostly for:
 
- * Managing roles.
- * Displaying messages.
+ * Managing roles
+ * Authenticating students
+ * Displaying messages
+ * _Fun stuff coming soon!_
 
 ## Installation
 
-### Prerequisites
+### 1. Prerequisites
 
 Make sure node and npm are installed and updated. Easiest way is downloading through [nvm](https://github.com/creationix/nvm).
 
@@ -25,7 +27,9 @@ Set default node version to latest:
 
 `nvm use node`
 
-### usc_bot and nodemodules
+Repeat the above steps for the root user as well (see [nvm issue #43](https://github.com/creationix/nvm/issues/43#issuecomment-335053139)).
+
+### 2. usc_bot and node_modules
 
 Clone the github repo to your current working directory:
 
@@ -39,17 +43,20 @@ Install the required node modules:
 
 `sudo npm install`
 
-### Config
+### 3. Config
 
-Create a json file called `config.json` in the current directory containing this information:
+Create a json file called `config.json` in the current config directory containing this information:
 ```json
 {
-    "token": "",
-    "prefix": "!"
+    "token": "Your discord api bot token",
+    "prefix": ". or ! or - or whatever you want",
+    "email": {
+    	"username": "bot gmail address (used for student command)",
+        "password": "password for the email"
+    },
+    "dev": "Discord user id for the developer (used for the suggestion command)"
 }
 ```
-
-Make sure you put the authentication key of the bot otherwise it will not work.
 
 ## Usage
 
@@ -61,9 +68,11 @@ To run the bot, simply type:
 
 `npm start`
 
-Note that you will have to leave your terminal open otherwise the bot will shut off. You will not have access to the current terminal window either.
+Note that you will have to leave your terminal open otherwise the bot will shut off. You will not have access to the current terminal window.
 
-### Option 2: Process Manager
+### Option 2: Process Manager 2
+
+This method will allow you to keep the bot running while you do other things in the same terminal window. The bot will continue running even when you exit the terminal.
 
 To use a process manager, download pm2:
 
@@ -80,3 +89,8 @@ To stop the bot, type:
 and then delete the process:
 
 `sudo pm2 delete index.js`
+
+## Important notes
+* Make sure you have a role that has the name "Student" otherwise the student command wont work.
+* "Managers" are to be treated as admins, meaning, if you don't want to give someone access to the entire server and all permissions including the ability to evaluate javascript code on the server, do not allow them to be a bot manager!
+* The bot role needs to be close to the top of the role hierarchy in order to give and take user's roles.
